@@ -3,8 +3,8 @@
 An animated, responsive redesign of the TIS homepage in black and light green.
 
 ## Live Demo
-- **Live URL:** [Insert Vercel link here]
-- **Repository:** [Insert GitHub repo link here]
+- **Live URL:** https://tis-homepage-redesign-one.vercel.app/
+- **Repository:** https://github.com/AbhishekMagasala1852/tis-homepage-redesign/
 
 ## Tech Stack
 - **Framework:** React 18 + Vite
@@ -20,7 +20,7 @@ An animated, responsive redesign of the TIS homepage in black and light green.
 
 ## Run Locally
 ```bash
-git clone <your-repo-url>
+git clone <my-repo-url>
 cd tis-homepage-redesign
 npm install
 npm run dev
