@@ -2,6 +2,7 @@ import { useState } from "react";
 import { MotionConfig } from "framer-motion";
 import useTheme from "./hooks/useTheme";
 import ScrollProgress from "./components/animation/ScrollProgress";
+import ScrollBackground from "./components/animation/ScrollBackground";
 import CustomCursor from "./components/animation/CustomCursor";
 import Marquee from "./components/animation/Marquee";
 import Navbar from "./components/layout/Navbar";
@@ -44,6 +45,7 @@ export default function App() {
 
   return (
     <MotionConfig reducedMotion="user">
+      <ScrollBackground />
       <ScrollProgress />
       <CustomCursor />
       <Navbar
