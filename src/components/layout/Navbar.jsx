@@ -152,7 +152,7 @@ export default function Navbar({
         </a>
       </div>
 
-      <header className="sticky top-0 z-40 border-b border-accent/20 bg-bg/80 backdrop-blur">
+     <header className="sticky top-0 z-40 border-b border-accent/20 backdrop-blur-lg" style={{ backgroundColor: "color-mix(in srgb, var(--bg) 65%, transparent)" }}>
         <nav className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-3">
           <div className="flex items-center gap-3">
             <button
