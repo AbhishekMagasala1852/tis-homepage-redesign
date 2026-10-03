@@ -1,11 +1,11 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function useTheme() {
   const [theme, setTheme] = useState(() => {
     try {
-      return localStorage.getItem("tis-theme") || "light";
+      return localStorage.getItem("tis-theme") || "dark";
     } catch {
-      return "light";
+      return "dark";
     }
   });
 
