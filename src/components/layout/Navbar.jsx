@@ -99,7 +99,10 @@ export default function Navbar({
   ];
 
   const renderDropdown = (items, closeFn) => (
-    <div className="absolute left-0 top-full mt-2 w-56 rounded-xl border border-accent/20 bg-bg p-2 shadow-xl z-50">
+    <div
+      className="absolute left-0 top-full mt-2 w-56 rounded-xl border border-accent/20 p-2 shadow-xl z-50 backdrop-blur-lg"
+      style={{ backgroundColor: "color-mix(in srgb, var(--bg) 75%, transparent)" }}
+    >
       {items.map((item) => (
         <a
           key={item.label}
@@ -145,14 +148,25 @@ export default function Navbar({
 
   return (
     <>
-      <div className="bg-card border-b border-accent/20 text-center text-sm font-medium text-fg py-2">
+      {/* Admissions bar — transparent + blur */}
+      <div
+        className="border-b border-accent/20 text-center text-sm font-medium text-fg py-2 backdrop-blur-lg"
+        style={{ backgroundColor: "color-mix(in srgb, var(--bg) 45%, transparent)" }}
+      >
         <span className="mr-2">📞</span> ADMISSIONS HELPLINE NO. +91-9837983791
-        <a href={applyUrl} className="ml-4 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-bg">
+        <a
+          href={applyUrl}
+          className="ml-4 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-bg"
+        >
           Enquire Now
         </a>
       </div>
 
-     <header className="sticky top-0 z-40 border-b border-accent/20 backdrop-blur-lg" style={{ backgroundColor: "color-mix(in srgb, var(--bg) 65%, transparent)" }}>
+      {/* Main header — more transparent */}
+      <header
+        className="sticky top-0 z-40 border-b border-accent/20 backdrop-blur-lg"
+        style={{ backgroundColor: "color-mix(in srgb, var(--bg) 45%, transparent)" }}
+      >
         <nav className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-5 py-3">
           <div className="flex items-center gap-3">
             <button
@@ -171,72 +185,124 @@ export default function Navbar({
           <ul className="hidden lg:flex gap-6 text-xs font-medium uppercase tracking-wider">
             <li className="relative">
               <button
-                onClick={(e) => { e.stopPropagation(); closeAll(); setAboutOpen(!aboutOpen); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  closeAll();
+                  setAboutOpen(!aboutOpen);
+                }}
                 className="flex items-center gap-1 text-muted hover:text-accent transition-colors uppercase"
               >
                 About TIS
-                <ChevronDown size={14} className={`transition-transform ${aboutOpen ? "rotate-180" : ""}`} />
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform ${aboutOpen ? "rotate-180" : ""}`}
+                />
               </button>
               {aboutOpen && renderDropdown(aboutItems, setAboutOpen)}
             </li>
 
             <li className="relative">
               <button
-                onClick={(e) => { e.stopPropagation(); closeAll(); setAcademicsOpen(!academicsOpen); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  closeAll();
+                  setAcademicsOpen(!academicsOpen);
+                }}
                 className="flex items-center gap-1 text-muted hover:text-accent transition-colors uppercase"
               >
                 Academics
-                <ChevronDown size={14} className={`transition-transform ${academicsOpen ? "rotate-180" : ""}`} />
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform ${academicsOpen ? "rotate-180" : ""}`}
+                />
               </button>
               {academicsOpen && renderDropdown(academicsItems, setAcademicsOpen)}
             </li>
 
             <li className="relative">
               <button
-                onClick={(e) => { e.stopPropagation(); closeAll(); setAdmissionOpen(!admissionOpen); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  closeAll();
+                  setAdmissionOpen(!admissionOpen);
+                }}
                 className="flex items-center gap-1 text-muted hover:text-accent transition-colors uppercase"
               >
                 Admission
-                <ChevronDown size={14} className={`transition-transform ${admissionOpen ? "rotate-180" : ""}`} />
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform ${admissionOpen ? "rotate-180" : ""}`}
+                />
               </button>
               {admissionOpen && renderDropdown(admissionItems, setAdmissionOpen)}
             </li>
 
             <li className="relative">
               <button
-                onClick={(e) => { e.stopPropagation(); closeAll(); setBeyondOpen(!beyondOpen); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  closeAll();
+                  setBeyondOpen(!beyondOpen);
+                }}
                 className="flex items-center gap-1 text-muted hover:text-accent transition-colors uppercase"
               >
                 Beyond Academics
-                <ChevronDown size={14} className={`transition-transform ${beyondOpen ? "rotate-180" : ""}`} />
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform ${beyondOpen ? "rotate-180" : ""}`}
+                />
               </button>
               {beyondOpen && renderDropdown(beyondItems, setBeyondOpen)}
             </li>
 
             <li className="relative">
               <button
-                onClick={(e) => { e.stopPropagation(); closeAll(); setBoardingOpen(!boardingOpen); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  closeAll();
+                  setBoardingOpen(!boardingOpen);
+                }}
                 className="flex items-center gap-1 text-muted hover:text-accent transition-colors uppercase"
               >
                 Boarding Life
-                <ChevronDown size={14} className={`transition-transform ${boardingOpen ? "rotate-180" : ""}`} />
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform ${boardingOpen ? "rotate-180" : ""}`}
+                />
               </button>
               {boardingOpen && renderDropdown(boardingItems, setBoardingOpen)}
             </li>
 
             <li className="relative">
               <button
-                onClick={(e) => { e.stopPropagation(); closeAll(); setEventsOpen(!eventsOpen); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  closeAll();
+                  setEventsOpen(!eventsOpen);
+                }}
                 className="flex items-center gap-1 text-muted hover:text-accent transition-colors uppercase"
               >
                 Events
-                <ChevronDown size={14} className={`transition-transform ${eventsOpen ? "rotate-180" : ""}`} />
+                <ChevronDown
+                  size={14}
+                  className={`transition-transform ${eventsOpen ? "rotate-180" : ""}`}
+                />
               </button>
               {eventsOpen && renderDropdown(eventsItems, setEventsOpen)}
             </li>
 
             {nav
-              .filter((n) => !["About TIS", "Academics", "Admission", "Beyond Academics", "Boarding Life", "Events"].includes(n.label))
+              .filter(
+                (n) =>
+                  ![
+                    "About TIS",
+                    "Academics",
+                    "Admission",
+                    "Beyond Academics",
+                    "Boarding Life",
+                    "Events",
+                  ].includes(n.label)
+              )
               .map((n) => {
                 if (n.label === "Mandatory Disclosure") {
                   return (
@@ -247,7 +313,9 @@ export default function Navbar({
                           e.preventDefault();
                           onShowMandatoryDisclosure();
                           setTimeout(() => {
-                            document.getElementById("mandatory-disclosure")?.scrollIntoView({ behavior: "smooth" });
+                            document
+                              .getElementById("mandatory-disclosure")
+                              ?.scrollIntoView({ behavior: "smooth" });
                           }, 250);
                         }}
                         className="text-muted transition-colors hover:text-accent"
@@ -260,7 +328,12 @@ export default function Navbar({
                 if (n.external) {
                   return (
                     <li key={n.href}>
-                      <a href={n.href} target="_blank" rel="noopener noreferrer" className="text-muted transition-colors hover:text-accent">
+                      <a
+                        href={n.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-muted transition-colors hover:text-accent"
+                      >
                         {n.label}
                       </a>
                     </li>
@@ -271,7 +344,12 @@ export default function Navbar({
                     <li key={n.href}>
                       <a
                         href="#enquire"
-                        onClick={(e) => { e.preventDefault(); document.getElementById("enquire")?.scrollIntoView({ behavior: "smooth" }); }}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          document
+                            .getElementById("enquire")
+                            ?.scrollIntoView({ behavior: "smooth" });
+                        }}
                         className="text-muted transition-colors hover:text-accent"
                       >
                         {n.label}
@@ -281,7 +359,10 @@ export default function Navbar({
                 }
                 return (
                   <li key={n.href}>
-                    <a href={n.href} className="text-muted transition-colors hover:text-accent">
+                    <a
+                      href={n.href}
+                      className="text-muted transition-colors hover:text-accent"
+                    >
                       {n.label}
                     </a>
                   </li>
@@ -290,7 +371,10 @@ export default function Navbar({
           </ul>
 
           <div className="flex items-center gap-3">
-            <a href={applyUrl} className="hidden sm:block rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-bg">
+            <a
+              href={applyUrl}
+              className="hidden sm:block rounded-full bg-accent px-4 py-1.5 text-sm font-medium text-bg"
+            >
               Apply Now
             </a>
             <ThemeToggle theme={theme} onToggle={onToggle} />
@@ -307,7 +391,10 @@ export default function Navbar({
 
         {/* Mobile menu panel */}
         {mobileMenuOpen && (
-          <div className="lg:hidden border-t border-accent/20 bg-bg/95 backdrop-blur max-h-[80vh] overflow-y-auto">
+          <div
+            className="lg:hidden border-t border-accent/20 backdrop-blur-lg max-h-[80vh] overflow-y-auto"
+            style={{ backgroundColor: "color-mix(in srgb, var(--bg) 75%, transparent)" }}
+          >
             <ul className="mx-auto max-w-7xl px-5 py-4 space-y-1">
               {groups.map((g) => (
                 <li key={g.key} className="border-b border-accent/10">
@@ -318,7 +405,9 @@ export default function Navbar({
                     {g.label}
                     <ChevronDown
                       size={14}
-                      className={`transition-transform ${mobileSubmenu === g.key ? "rotate-180" : ""}`}
+                      className={`transition-transform ${
+                        mobileSubmenu === g.key ? "rotate-180" : ""
+                      }`}
                     />
                   </button>
                   {mobileSubmenu === g.key && (
@@ -342,7 +431,17 @@ export default function Navbar({
               ))}
 
               {nav
-                .filter((n) => !["About TIS", "Academics", "Admission", "Beyond Academics", "Boarding Life", "Events"].includes(n.label))
+                .filter(
+                  (n) =>
+                    ![
+                      "About TIS",
+                      "Academics",
+                      "Admission",
+                      "Beyond Academics",
+                      "Boarding Life",
+                      "Events",
+                    ].includes(n.label)
+                )
                 .map((n) => {
                   if (n.label === "Mandatory Disclosure") {
                     return (
@@ -354,7 +453,9 @@ export default function Navbar({
                             onShowMandatoryDisclosure();
                             setMobileMenuOpen(false);
                             setTimeout(() => {
-                              document.getElementById("mandatory-disclosure")?.scrollIntoView({ behavior: "smooth" });
+                              document
+                                .getElementById("mandatory-disclosure")
+                                ?.scrollIntoView({ behavior: "smooth" });
                             }, 300);
                           }}
                           className="block px-2 py-3 text-sm font-medium uppercase tracking-wider text-muted hover:text-accent"
@@ -388,7 +489,9 @@ export default function Navbar({
                             e.preventDefault();
                             setMobileMenuOpen(false);
                             setTimeout(() => {
-                              document.getElementById("enquire")?.scrollIntoView({ behavior: "smooth" });
+                              document
+                                .getElementById("enquire")
+                                ?.scrollIntoView({ behavior: "smooth" });
                             }, 300);
                           }}
                           className="block px-2 py-3 text-sm font-medium uppercase tracking-wider text-muted hover:text-accent"
