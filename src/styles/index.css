@@ -26,9 +26,12 @@
   --muted: #4c6648;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  background: transparent !important;
+}
 
-/* Fully transparent body — the canvas shows through everywhere */
+/* Fully transparent body — the canvas shows through everywhere with nothing blocking it */
 body {
   background: transparent !important;
   color: var(--fg);
@@ -36,26 +39,7 @@ body {
   transition: color 0.4s;
 }
 
-/* Also strip color from the html element so nothing paints the background */
-html {
-  background: transparent !important;
-}
-
-/* Fallback tinted layer (very light) so text is readable over the canvas */
-/* This sits BEHIND the canvas (z-index: -4) so the images are always visible. */
-html::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -4;
-  background: var(--bg);
-  pointer-events: none;
-  opacity: 0.35;
-}
-
-[data-theme="light"] html::before {
-  opacity: 0.25;
-}
+/* NO ::before tint layer. The canvas IS the background. */
 
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
@@ -71,47 +55,55 @@ html::before {
    ============================================================ */
 
 .bg-card {
-  background-color: color-mix(in srgb, var(--card) 55%, transparent) !important;
+  background-color: color-mix(in srgb, var(--card) 65%, transparent) !important;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
 
 [data-theme="light"] .bg-card {
-  background-color: color-mix(in srgb, var(--card) 45%, transparent) !important;
+  background-color: color-mix(in srgb, var(--card) 55%, transparent) !important;
 }
 
-/* Navbar background */
+/* Navbar background — keep a slight tint + blur for readability */
 header.sticky {
-  background-color: color-mix(in srgb, var(--bg) 45%, transparent) !important;
+  background-color: color-mix(in srgb, var(--bg) 55%, transparent) !important;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
 
 [data-theme="light"] header.sticky {
-  background-color: color-mix(in srgb, var(--bg) 35%, transparent) !important;
+  background-color: color-mix(in srgb, var(--bg) 45%, transparent) !important;
+}
+
+/* Admissions bar at the very top */
+header + div,
+.bg-card.border-b {
+  background-color: color-mix(in srgb, var(--bg) 55%, transparent) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 /* ============================================================
-   Scroll-scrubbed background canvas — the star of the show
+   Scroll-scrubbed background canvas — full brightness, no wash
    ============================================================ */
 .scroll-bg-canvas {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -2;
+  z-index: -1;
   pointer-events: none;
-  opacity: 0.55;
+  opacity: 0.75;
   transition: opacity 0.5s ease;
   display: block;
 }
 
 [data-theme="light"] .scroll-bg-canvas {
-  opacity: 0.42;
+  opacity: 0.55;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .scroll-bg-canvas {
-    opacity: 0.30;
+    opacity: 0.40;
   }
 }
