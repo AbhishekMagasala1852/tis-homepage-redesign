@@ -1,4 +1,4 @@
-﻿@import "tailwindcss";
+@import "tailwindcss";
 
 @theme inline {
   --color-bg: var(--bg);
@@ -35,6 +35,33 @@ body {
   transition: background 0.4s, color 0.4s;
 }
 
+/* Make the page itself semi-transparent so the scroll-bg shows through.
+   In light mode we go way more transparent so the background is visible. */
+body {
+  background-color: transparent !important;
+}
+
+/* Give the whole page a colored tint that respects the theme */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background: var(--bg);
+  opacity: 1;
+  pointer-events: none;
+}
+
+/* LIGHT MODE: very transparent background overlay */
+[data-theme="light"] body::before {
+  opacity: 0.55;
+}
+
+/* DARK MODE: solid background overlay (keeps the dark feel) */
+[data-theme="dark"] body::before {
+  opacity: 0.88;
+}
+
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 @media (hover: hover) and (pointer: fine) {
@@ -45,23 +72,49 @@ body {
 }
 
 /* ============================================================
+   Cards — semi-transparent in both themes so the background shows
+   ============================================================ */
+
+/* Base: use a color-mix with transparency */
+.bg-card {
+  background-color: color-mix(in srgb, var(--card) 78%, transparent) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* In light mode make cards even more transparent */
+[data-theme="light"] .bg-card {
+  background-color: color-mix(in srgb, var(--card) 60%, transparent) !important;
+}
+
+/* Navbar background */
+header.sticky {
+  background-color: color-mix(in srgb, var(--bg) 75%, transparent) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+[data-theme="light"] header.sticky {
+  background-color: color-mix(in srgb, var(--bg) 55%, transparent) !important;
+}
+
+/* ============================================================
    Scroll-scrubbed background canvas
-   Frames: /ezgif-frame-001.jpg through /ezgif-frame-040.jpg
    ============================================================ */
 .scroll-bg-canvas {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -1;
+  z-index: -3;
   pointer-events: none;
-  opacity: 0.28;
+  opacity: 0.32;
   transition: opacity 0.5s ease;
   display: block;
 }
 
 [data-theme="light"] .scroll-bg-canvas {
-  opacity: 0.12;
+  opacity: 0.22;
 }
 
 @media (prefers-reduced-motion: reduce) {
