@@ -28,38 +28,33 @@
 
 html { scroll-behavior: smooth; }
 
+/* Fully transparent body — the canvas shows through everywhere */
 body {
-  background: var(--bg);
+  background: transparent !important;
   color: var(--fg);
   font-family: var(--font-sans);
-  transition: background 0.4s, color 0.4s;
+  transition: color 0.4s;
 }
 
-/* Make the page itself semi-transparent so the scroll-bg shows through.
-   In light mode we go way more transparent so the background is visible. */
-body {
-  background-color: transparent !important;
+/* Also strip color from the html element so nothing paints the background */
+html {
+  background: transparent !important;
 }
 
-/* Give the whole page a colored tint that respects the theme */
-body::before {
+/* Fallback tinted layer (very light) so text is readable over the canvas */
+/* This sits BEHIND the canvas (z-index: -4) so the images are always visible. */
+html::before {
   content: "";
   position: fixed;
   inset: 0;
-  z-index: -2;
+  z-index: -4;
   background: var(--bg);
-  opacity: 1;
   pointer-events: none;
+  opacity: 0.35;
 }
 
-/* LIGHT MODE: very transparent background overlay */
-[data-theme="light"] body::before {
-  opacity: 0.55;
-}
-
-/* DARK MODE: solid background overlay (keeps the dark feel) */
-[data-theme="dark"] body::before {
-  opacity: 0.88;
+[data-theme="light"] html::before {
+  opacity: 0.25;
 }
 
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
@@ -72,53 +67,51 @@ body::before {
 }
 
 /* ============================================================
-   Cards — semi-transparent in both themes so the background shows
+   Cards — semi-transparent so the canvas is visible through them
    ============================================================ */
 
-/* Base: use a color-mix with transparency */
 .bg-card {
-  background-color: color-mix(in srgb, var(--card) 78%, transparent) !important;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background-color: color-mix(in srgb, var(--card) 55%, transparent) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
-/* In light mode make cards even more transparent */
 [data-theme="light"] .bg-card {
-  background-color: color-mix(in srgb, var(--card) 60%, transparent) !important;
+  background-color: color-mix(in srgb, var(--card) 45%, transparent) !important;
 }
 
 /* Navbar background */
 header.sticky {
-  background-color: color-mix(in srgb, var(--bg) 75%, transparent) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background-color: color-mix(in srgb, var(--bg) 45%, transparent) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
 }
 
 [data-theme="light"] header.sticky {
-  background-color: color-mix(in srgb, var(--bg) 55%, transparent) !important;
+  background-color: color-mix(in srgb, var(--bg) 35%, transparent) !important;
 }
 
 /* ============================================================
-   Scroll-scrubbed background canvas
+   Scroll-scrubbed background canvas — the star of the show
    ============================================================ */
 .scroll-bg-canvas {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -3;
+  z-index: -2;
   pointer-events: none;
-  opacity: 0.32;
+  opacity: 0.55;
   transition: opacity 0.5s ease;
   display: block;
 }
 
 [data-theme="light"] .scroll-bg-canvas {
-  opacity: 0.22;
+  opacity: 0.42;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .scroll-bg-canvas {
-    opacity: 0.18;
+    opacity: 0.30;
   }
 }
