@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { nav, applyUrl } from "../../data/content";
 import ThemeToggle from "../ui/ThemeToggle";
 import LogoModal from "../ui/LogoModal";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 
 export default function Navbar({
   theme,
@@ -34,6 +34,8 @@ export default function Navbar({
   const [boardingOpen, setBoardingOpen] = useState(false);
   const [eventsOpen, setEventsOpen] = useState(false);
   const [logoOpen, setLogoOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [mobileSubmenu, setMobileSubmenu] = useState(null);
 
   const closeAll = () => {
     setAboutOpen(false);
@@ -48,6 +50,18 @@ export default function Navbar({
     window.addEventListener("click", closeAll);
     return () => window.removeEventListener("click", closeAll);
   }, []);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenuOpen]);
 
   const aboutItems = [
     { label: "Our History", handler: onShowHistory, target: "history" },
@@ -70,12 +84,8 @@ export default function Navbar({
     { label: "International Tie-Ups", handler: onShowInternationalTieUps, target: "international-tieups" },
   ];
 
-  // Beyond Academics — only Sports
-  const beyondItems = [
-    { label: "Sports", target: "beyond" },
-  ];
+  const beyondItems = [{ label: "Sports", target: "beyond" }];
 
-  // Boarding Life — Facilities, Food & Nutrition, Pastoral Care
   const boardingItems = [
     { label: "Facilities", handler: onShowFacilities, target: "facilities" },
     { label: "Food & Nutrition", handler: onShowFoodNutrition, target: "food-nutrition" },
@@ -110,6 +120,29 @@ export default function Navbar({
     </div>
   );
 
+  // Mobile: handle click on a dropdown group
+  const handleMobileSubmenu = (key) => {
+    setMobileSubmenu(mobileSubmenu === key ? null : key);
+  };
+
+  const handleMobileNav = (item) => {
+    if (item.handler) item.handler();
+    setMobileMenuOpen(false);
+    setMobileSubmenu(null);
+    setTimeout(() => {
+      document.getElementById(item.target)?.scrollIntoView({ behavior: "smooth" });
+    }, 300);
+  };
+
+  const groups = [
+    { key: "about", label: "About TIS", items: aboutItems },
+    { key: "academics", label: "Academics", items: academicsItems },
+    { key: "admission", label: "Admission", items: admissionItems },
+    { key: "beyond", label: "Beyond Academics", items: beyondItems },
+    { key: "boarding", label: "Boarding Life", items: boardingItems },
+    { key: "events", label: "Events", items: eventsItems },
+  ];
+
   return (
     <>
       <div className="bg-card border-b border-accent/20 text-center text-sm font-medium text-fg py-2">
@@ -134,8 +167,8 @@ export default function Navbar({
             </button>
           </div>
 
+          {/* Desktop menu */}
           <ul className="hidden lg:flex gap-6 text-xs font-medium uppercase tracking-wider">
-            {/* About TIS */}
             <li className="relative">
               <button
                 onClick={(e) => { e.stopPropagation(); closeAll(); setAboutOpen(!aboutOpen); }}
@@ -147,7 +180,6 @@ export default function Navbar({
               {aboutOpen && renderDropdown(aboutItems, setAboutOpen)}
             </li>
 
-            {/* Academics */}
             <li className="relative">
               <button
                 onClick={(e) => { e.stopPropagation(); closeAll(); setAcademicsOpen(!academicsOpen); }}
@@ -159,7 +191,6 @@ export default function Navbar({
               {academicsOpen && renderDropdown(academicsItems, setAcademicsOpen)}
             </li>
 
-            {/* Admission */}
             <li className="relative">
               <button
                 onClick={(e) => { e.stopPropagation(); closeAll(); setAdmissionOpen(!admissionOpen); }}
@@ -171,7 +202,6 @@ export default function Navbar({
               {admissionOpen && renderDropdown(admissionItems, setAdmissionOpen)}
             </li>
 
-            {/* Beyond Academics — only Sports */}
             <li className="relative">
               <button
                 onClick={(e) => { e.stopPropagation(); closeAll(); setBeyondOpen(!beyondOpen); }}
@@ -183,7 +213,6 @@ export default function Navbar({
               {beyondOpen && renderDropdown(beyondItems, setBeyondOpen)}
             </li>
 
-            {/* Boarding Life — Facilities, Food, Pastoral */}
             <li className="relative">
               <button
                 onClick={(e) => { e.stopPropagation(); closeAll(); setBoardingOpen(!boardingOpen); }}
@@ -195,7 +224,6 @@ export default function Navbar({
               {boardingOpen && renderDropdown(boardingItems, setBoardingOpen)}
             </li>
 
-            {/* Events */}
             <li className="relative">
               <button
                 onClick={(e) => { e.stopPropagation(); closeAll(); setEventsOpen(!eventsOpen); }}
@@ -266,8 +294,134 @@ export default function Navbar({
               Apply Now
             </a>
             <ThemeToggle theme={theme} onToggle={onToggle} />
+            {/* Hamburger — only on mobile/tablet */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+              className="lg:hidden grid h-10 w-10 place-items-center rounded-full border border-accent/30 text-fg transition-colors hover:bg-accent hover:text-bg"
+            >
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
           </div>
         </nav>
+
+        {/* Mobile menu panel */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden border-t border-accent/20 bg-bg/95 backdrop-blur max-h-[80vh] overflow-y-auto">
+            <ul className="mx-auto max-w-7xl px-5 py-4 space-y-1">
+              {groups.map((g) => (
+                <li key={g.key} className="border-b border-accent/10">
+                  <button
+                    onClick={() => handleMobileSubmenu(g.key)}
+                    className="flex w-full items-center justify-between px-2 py-3 text-sm font-medium uppercase tracking-wider text-muted hover:text-accent"
+                  >
+                    {g.label}
+                    <ChevronDown
+                      size={14}
+                      className={`transition-transform ${mobileSubmenu === g.key ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                  {mobileSubmenu === g.key && (
+                    <div className="pb-2 pl-4">
+                      {g.items.map((item) => (
+                        <a
+                          key={item.label}
+                          href={`#${item.target}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleMobileNav(item);
+                          }}
+                          className="block rounded-lg px-3 py-2 text-xs text-muted transition-colors hover:bg-accent/10 hover:text-accent"
+                        >
+                          {item.label}
+                        </a>
+                      ))}
+                    </div>
+                  )}
+                </li>
+              ))}
+
+              {nav
+                .filter((n) => !["About TIS", "Academics", "Admission", "Beyond Academics", "Boarding Life", "Events"].includes(n.label))
+                .map((n) => {
+                  if (n.label === "Mandatory Disclosure") {
+                    return (
+                      <li key={n.href} className="border-b border-accent/10">
+                        <a
+                          href="#mandatory-disclosure"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            onShowMandatoryDisclosure();
+                            setMobileMenuOpen(false);
+                            setTimeout(() => {
+                              document.getElementById("mandatory-disclosure")?.scrollIntoView({ behavior: "smooth" });
+                            }, 300);
+                          }}
+                          className="block px-2 py-3 text-sm font-medium uppercase tracking-wider text-muted hover:text-accent"
+                        >
+                          {n.label}
+                        </a>
+                      </li>
+                    );
+                  }
+                  if (n.external) {
+                    return (
+                      <li key={n.href} className="border-b border-accent/10">
+                        <a
+                          href={n.href}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          onClick={() => setMobileMenuOpen(false)}
+                          className="block px-2 py-3 text-sm font-medium uppercase tracking-wider text-muted hover:text-accent"
+                        >
+                          {n.label}
+                        </a>
+                      </li>
+                    );
+                  }
+                  if (n.label === "Quick Links") {
+                    return (
+                      <li key={n.href} className="border-b border-accent/10">
+                        <a
+                          href="#enquire"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setMobileMenuOpen(false);
+                            setTimeout(() => {
+                              document.getElementById("enquire")?.scrollIntoView({ behavior: "smooth" });
+                            }, 300);
+                          }}
+                          className="block px-2 py-3 text-sm font-medium uppercase tracking-wider text-muted hover:text-accent"
+                        >
+                          {n.label}
+                        </a>
+                      </li>
+                    );
+                  }
+                  return (
+                    <li key={n.href} className="border-b border-accent/10">
+                      <a
+                        href={n.href}
+                        onClick={() => setMobileMenuOpen(false)}
+                        className="block px-2 py-3 text-sm font-medium uppercase tracking-wider text-muted hover:text-accent"
+                      >
+                        {n.label}
+                      </a>
+                    </li>
+                  );
+                })}
+
+              <li className="pt-4">
+                <a
+                  href={applyUrl}
+                  className="block rounded-full bg-accent px-5 py-3 text-center text-sm font-semibold text-bg"
+                >
+                  Apply Now
+                </a>
+              </li>
+            </ul>
+          </div>
+        )}
       </header>
 
       <LogoModal isOpen={logoOpen} onClose={() => setLogoOpen(false)} />
