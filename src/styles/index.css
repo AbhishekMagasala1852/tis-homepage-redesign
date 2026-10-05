@@ -12,10 +12,10 @@
 
 :root {
   --bg: #050805;
-  --fg: #eef5ea;
+  --fg: #ffffff;              /* brighter white for readability */
   --accent: #b8f7a1;
   --card: #0f160f;
-  --muted: #8fa38a;
+  --muted: #c9d8c4;           /* brighter grey — was #8fa38a */
 }
 
 [data-theme="light"] {
@@ -23,7 +23,7 @@
   --fg: #0a140a;
   --accent: #1f7a2e;
   --card: #e3f0dc;
-  --muted: #4c6648;
+  --muted: #2b3a26;           /* much darker grey — was #4c6648 */
 }
 
 html {
@@ -31,15 +31,37 @@ html {
   background: transparent !important;
 }
 
-/* Fully transparent body — the canvas shows through everywhere with nothing blocking it */
 body {
   background: transparent !important;
   color: var(--fg);
   font-family: var(--font-sans);
   transition: color 0.4s;
+  /* Global soft shadow so all text stays readable over the animated background */
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
 }
 
-/* NO ::before tint layer. The canvas IS the background. */
+/* In light mode, use a light shadow instead of a dark one */
+[data-theme="light"] body {
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.75);
+}
+
+/* ============================================================
+   Soft tint layer behind everything (but above the canvas)
+   Keeps the animation visible while making text readable.
+   ============================================================ */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: var(--bg);
+  opacity: 0.55;   /* dark mode: subtle dark veil */
+}
+
+[data-theme="light"] body::before {
+  opacity: 0.45;   /* light mode: subtle light veil */
+}
 
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
@@ -51,47 +73,38 @@ body {
 }
 
 /* ============================================================
-   Cards — semi-transparent so the canvas is visible through them
+   Cards — semi-transparent, with blur to keep text readable
    ============================================================ */
-
 .bg-card {
-  background-color: color-mix(in srgb, var(--card) 65%, transparent) !important;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background-color: color-mix(in srgb, var(--card) 72%, transparent) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
 [data-theme="light"] .bg-card {
-  background-color: color-mix(in srgb, var(--card) 55%, transparent) !important;
+  background-color: color-mix(in srgb, var(--card) 65%, transparent) !important;
 }
 
-/* Navbar background — keep a slight tint + blur for readability */
+/* Navbar background */
 header.sticky {
-  background-color: color-mix(in srgb, var(--bg) 55%, transparent) !important;
+  background-color: color-mix(in srgb, var(--bg) 60%, transparent) !important;
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
 }
 
 [data-theme="light"] header.sticky {
-  background-color: color-mix(in srgb, var(--bg) 45%, transparent) !important;
-}
-
-/* Admissions bar at the very top */
-header + div,
-.bg-card.border-b {
-  background-color: color-mix(in srgb, var(--bg) 55%, transparent) !important;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background-color: color-mix(in srgb, var(--bg) 50%, transparent) !important;
 }
 
 /* ============================================================
-   Scroll-scrubbed background canvas — full brightness, no wash
+   Scroll-scrubbed background canvas
    ============================================================ */
 .scroll-bg-canvas {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
-  z-index: -1;
+  z-index: -3;
   pointer-events: none;
   opacity: 0.75;
   transition: opacity 0.5s ease;
@@ -106,4 +119,33 @@ header + div,
   .scroll-bg-canvas {
     opacity: 0.40;
   }
+}
+
+/* ============================================================
+   Global text color overrides — make sure muted text is still readable
+   ============================================================ */
+.text-muted {
+  color: var(--muted) !important;
+  font-weight: 500;   /* slightly heavier weight for readability */
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+footer {
+  background-color: color-mix(in srgb, var(--bg) 78%, transparent) !important;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+[data-theme="light"] footer {
+  background-color: color-mix(in srgb, var(--bg) 70%, transparent) !important;
+}
+
+/* ============================================================
+   Marquee text — was too faint
+   ============================================================ */
+.font-sans.italic.tracking-widest {
+  color: var(--accent) !important;
+  opacity: 0.9 !important;
 }
